@@ -1,32 +1,56 @@
 import React from "react"
 import Link from "next/link"
 
+const liStyle = { listStyle: "none" }
+
+const aStyle = {
+  color: "white",
+  fontSize: "23px",
+  fontWeight: "bold",
+  textDecoration: "none"
+}
+
 const Nav = () => (
-  <nav>
-    <ul>
-      <li>
+  <nav
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "80px",
+      background: "blue"
+    }}
+  >
+    <ul
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        width: "70%"
+      }}
+    >
+      <li style={liStyle}>
         <Link href="/">
-          <a>Home</a>
+          <a style={aStyle}>Home</a>
         </Link>
       </li>
-      <li>
+      <li style={liStyle}>
         <Link href="/products">
-          <a>Products</a>
+          <a style={aStyle}>Products</a>
         </Link>
       </li>
-      <li>
+      <li style={liStyle}>
         <Link href="/cart">
-          <a>Cart</a>
+          <a style={aStyle}>Cart</a>
         </Link>
       </li>
-      <li>
+      <li style={liStyle}>
         <Link href="/signin">
-          <a>Sign In</a>
+          <a style={aStyle}>Sign In</a>
         </Link>
       </li>
-      <li>
+      <li style={liStyle}>
         <Link href="/signup">
-          <a>Sign Up</a>
+          <a style={aStyle}>Sign Up</a>
         </Link>
       </li>
     </ul>
