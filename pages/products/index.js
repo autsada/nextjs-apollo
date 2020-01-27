@@ -1,28 +1,26 @@
 import React from "react"
 import Link from "next/link"
+import { useQuery } from "@apollo/react-hooks"
+import gql from "graphql-tag"
 
-const fakeData = [
-  {
-    id: 1,
-    description: "Rooibos Tea",
-    price: 100,
-    imageUrl: "https://s3.images-iherb.com/ygt/ygt41533/v/11.jpg"
-  },
-  {
-    id: 2,
-    description: "Green Tea",
-    price: 150,
-    imageUrl: "https://s3.images-iherb.com/hnb/hnb01381/v/0.jpg"
-  },
-  {
-    id: 3,
-    description: "Black Tea",
-    price: 200,
-    imageUrl: "https://s3.images-iherb.com/hrn/hrn00959/v/4.jpg"
+const QUERY_PRODUCTS = gql`
+  query {
+    products {
+      id
+      description
+      price
+      imageUrl
+    }
   }
-]
+`
 
 const products = () => {
+  const { data, loading, error } = useQuery(QUERY_PRODUCTS)
+
+  if (error) return <p>Ooobs...something went wrong, please try again later.</p>
+
+  if (loading) return <p>Loading...</p>
+
   return (
     <div
       style={{
@@ -32,7 +30,7 @@ const products = () => {
         marginTop: "40px"
       }}
     >
-      {fakeData.map(prod => (
+      {data.products.map(prod => (
         <div
           key={prod.id}
           style={{
