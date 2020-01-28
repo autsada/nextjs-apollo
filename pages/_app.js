@@ -1,17 +1,25 @@
 // import App from 'next/app'
 
-import { ApolloProvider } from "@apollo/react-hooks"
+// import { ApolloProvider } from "@apollo/react-hooks"
 
 import PageLayout from "../components/PageLayout"
-import apolloClient from "../apollo/apolloClient"
+// import apolloClient from "../apollo/apolloClient"
+
+// function MyApp({ Component, pageProps, apollo }) {
+//   return (
+//     <ApolloProvider client={apollo}>
+//       <PageLayout>
+//         <Component {...pageProps} />
+//       </PageLayout>
+//     </ApolloProvider>
+//   )
+// }
 
 function MyApp({ Component, pageProps, apollo }) {
   return (
-    <ApolloProvider client={apollo}>
-      <PageLayout>
-        <Component {...pageProps} />
-      </PageLayout>
-    </ApolloProvider>
+    <PageLayout>
+      <Component {...pageProps} />
+    </PageLayout>
   )
 }
 
@@ -27,4 +35,4 @@ function MyApp({ Component, pageProps, apollo }) {
 //   return { ...appProps }
 // }
 
-export default apolloClient(MyApp)
+export default MyApp
