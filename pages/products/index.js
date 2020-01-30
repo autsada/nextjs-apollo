@@ -28,10 +28,10 @@ const Products = () => {
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        marginTop: "40px"
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr",
+        margin: "40px",
+        gridGap: "10px"
       }}
     >
       {data.products.map(prod => (
@@ -40,7 +40,10 @@ const Products = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center"
+            alignItems: "center",
+            marginBottom: "30px",
+            border: "solid 1px black",
+            padding: "10px"
           }}
         >
           <Link href="/products/[productId]" as={`/products/${prod.id}`}>
