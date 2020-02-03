@@ -1,7 +1,10 @@
 import React from "react"
 
-const signup = () => {
-  return <div>Sign Up Page</div>
+import apolloClient from "../apollo/apolloClient"
+import Signup from "../components/Signup"
+
+const SignpuPage = () => {
+  return <Signup />
 }
 
-export default signup
+export default apolloClient(SignpuPage)
