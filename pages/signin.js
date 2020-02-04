@@ -1,7 +1,10 @@
 import React from "react"
 
-const signin = () => {
-  return <div>Sign In Page</div>
+import apolloClient from "../apollo/apolloClient"
+import Signin from "../components/Signin"
+
+const SignInPage = () => {
+  return <Signin />
 }
 
-export default signin
+export default apolloClient(SignInPage)
