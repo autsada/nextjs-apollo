@@ -1,7 +1,8 @@
 import React, { useState } from "react"
-import Link from "next/link"
+import Router from "next/router"
 import { useMutation } from "@apollo/react-hooks"
 import gql from "graphql-tag"
+import Cookies from "js-cookie"
 
 const LOG_IN = gql`
   mutation LOG_IN($email: String!, $password: String!) {
@@ -38,11 +39,12 @@ const Signin = () => {
     variables: { ...userInfo },
     onCompleted: data => {
       if (data) {
-        console.log(data)
+        Cookies.set("jwt", data.login.jwt)
         setUserInfo({
           email: "",
           password: ""
         })
+        Router.push("/products")
       }
     }
   })
