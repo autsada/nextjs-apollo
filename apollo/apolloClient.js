@@ -1,5 +1,4 @@
 import { ApolloClient } from "apollo-client"
-import { ApolloProvider } from "@apollo/react-hooks"
 import { createHttpLink } from "apollo-link-http"
 import { setContext } from "apollo-link-context"
 import { InMemoryCache } from "apollo-cache-inmemory"
@@ -41,14 +40,14 @@ export default withApollo(
       link: authLink.concat(httpLink),
       cache: new InMemoryCache().restore(initialState || {})
     })
-  },
-  {
-    render: ({ Page, props }) => {
-      return (
-        <ApolloProvider client={props.apollo}>
-          <Page {...props} />
-        </ApolloProvider>
-      )
-    }
   }
+  // {
+  //   render: ({ Page, props }) => {
+  //     return (
+  //       <ApolloProvider client={props.apollo}>
+  //         <Page {...props} />
+  //       </ApolloProvider>
+  //     )
+  //   }
+  // }
 )

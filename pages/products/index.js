@@ -3,8 +3,6 @@ import Link from "next/link"
 import { useQuery } from "@apollo/react-hooks"
 import gql from "graphql-tag"
 
-import apolloClient from "../../apollo/apolloClient"
-
 const QUERY_PRODUCTS = gql`
   query {
     products {
@@ -68,4 +66,4 @@ const Products = () => {
   )
 }
 
-export default apolloClient(Products)
+export default Products
