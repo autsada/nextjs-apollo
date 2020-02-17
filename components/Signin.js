@@ -114,6 +114,13 @@ const Signin = () => {
       </form>
 
       <div style={{ width: "30%", margin: "auto" }}>
+        <p>
+          Forgot password?{" "}
+          <span style={{ color: "orange", cursor: "pointer" }} onClick={() => Router.push('/signin/resetpassword')}>Click here</span>
+        </p>
+      </div>
+
+      <div style={{ width: "30%", margin: "auto" }}>
         {error && (
           <p style={{ color: "red" }}>{error.graphQLErrors[0].message}</p>
         )}
