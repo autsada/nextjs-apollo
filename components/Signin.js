@@ -116,7 +116,12 @@ const Signin = () => {
       <div style={{ width: "30%", margin: "auto" }}>
         <p>
           Forgot password?{" "}
-          <span style={{ color: "orange", cursor: "pointer" }} onClick={() => Router.push('/signin/resetpassword')}>Click here</span>
+          <span
+            style={{ color: "orange", cursor: "pointer" }}
+            onClick={() => Router.push("/signin/requestresetpassword")}
+          >
+            Click here
+          </span>
         </p>
       </div>
 
