@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
+import fetch from 'isomorphic-unfetch'
 import gql from 'graphql-tag'
 
 import { QUERY_PRODUCTS } from './Products'
@@ -22,8 +23,9 @@ const CREATE_PRODUCT = gql`
     }
   }
 `
-
+//
 const ManageProduct = () => {
+  const [file, setFile] = useState(null)
   const [productData, setProductData] = useState({
     description: '',
     imageUrl: '',
@@ -31,18 +33,49 @@ const ManageProduct = () => {
   })
 
   const [createProduct, { loading, error }] = useMutation(CREATE_PRODUCT, {
-    variables: { ...productData, price: +productData.price },
     refetchQueries: [{ query: QUERY_PRODUCTS }]
   })
 
   const handleChange = e =>
     setProductData({ ...productData, [e.target.name]: e.target.value })
 
+  const selectFile = e => {
+    const files = e.target.files
+    setFile(files[0])
+  }
+
+  const uploadFile = async () => {
+    const data = new FormData()
+    data.append('file', file)
+    data.append('upload_preset', 'graphql-basic')
+
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/aut-media/image/upload',
+      {
+        method: 'post',
+        body: data
+      }
+    )
+    const result = await res.json()
+
+    return result.secure_url
+  }
+
   const handleSubmit = async e => {
     try {
       e.preventDefault()
-      const result = await createProduct()
-      console.log(result)
+      const url = await uploadFile()
+
+      if (url) {
+        const result = await createProduct({
+          variables: {
+            ...productData,
+            imageUrl: url,
+            price: +productData.price
+          }
+        })
+        console.log(result)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -67,14 +100,7 @@ const ManageProduct = () => {
           value={productData.description}
           onChange={handleChange}
         />
-        <input
-          style={{ margin: '5px', height: '30px' }}
-          type='text'
-          name='imageUrl'
-          placeholder='Product Image'
-          value={productData.imageUrl}
-          onChange={handleChange}
-        />
+
         <input
           style={{ margin: '5px', height: '30px' }}
           type='number'
@@ -83,6 +109,16 @@ const ManageProduct = () => {
           value={productData.price}
           onChange={handleChange}
         />
+
+        <input
+          style={{ margin: '5px', height: '30px' }}
+          type='file'
+          name='file'
+          placeholder='Product Image'
+          // value={productData.imageUrl}
+          onChange={selectFile}
+        />
+
         <button
           style={{
             margin: '5px',
@@ -90,11 +126,16 @@ const ManageProduct = () => {
             background: 'teal',
             color: 'white',
             border: 'none',
-            cursor: 'pointer',
+            cursor:
+              !productData.description || !file || !productData.price || loading
+                ? 'not-allowed'
+                : 'pointer',
             fontSize: '18px'
           }}
           type='submit'
-          disabled={loading}
+          disabled={
+            !productData.description || !file || !productData.price || loading
+          }
         >
           Submit{loading ? 'ting...' : ''}
         </button>
@@ -105,9 +146,7 @@ const ManageProduct = () => {
           <p style={{ color: 'red' }}>{error.graphQLErrors[0].message}</p>
         )}
 
-        {(!productData.description ||
-          !productData.imageUrl ||
-          !productData.price) && (
+        {(!productData.description || !file || !productData.price) && (
           <p style={{ color: 'red' }}>Please fill in all required fields</p>
         )}
       </div>
