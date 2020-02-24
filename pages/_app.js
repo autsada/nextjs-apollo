@@ -1,12 +1,12 @@
 // import App from 'next/app'
 
-import { ApolloProvider } from "@apollo/react-hooks"
-import fetch from "isomorphic-unfetch"
-import cookie from "cookie"
+import { ApolloProvider } from '@apollo/react-hooks'
+import fetch from 'isomorphic-unfetch'
+import cookie from 'cookie'
 
-import PageLayout from "../components/PageLayout"
-import AuthProvider from "../appState/AuthProvider"
-import apolloClient from "../apollo/apolloClient"
+import PageLayout from '../components/PageLayout'
+import AuthProvider from '../appState/AuthProvider'
+import apolloClient from '../apollo/apolloClient'
 
 // function MyApp({ Component, pageProps, apollo }) {
 //   return (
@@ -64,27 +64,25 @@ MyApp.getInitialProps = async ({ ctx, router }) => {
     return __NEXT_DATA__.props.pageProps
   }
 
-  console.log("Router -->", router)
-
   const { headers } = ctx.req
 
-  const cookies = headers && cookie.parse(headers.cookie || "")
+  const cookies = headers && cookie.parse(headers.cookie || '')
 
   const token = cookies && cookies.jwt
 
   if (!token) {
-    if (router.pathname === "/cart") {
-      ctx.res.writeHead(302, { Location: "/signin" })
+    if (router.pathname === '/cart' || router.pathname === '/manageProduct') {
+      ctx.res.writeHead(302, { Location: '/signin' })
       ctx.res.end()
     }
     return null
   }
 
-  const response = await fetch("http://localhost:4444/graphql", {
-    method: "post",
+  const response = await fetch('http://localhost:4444/graphql', {
+    method: 'post',
     headers: {
-      "Content-Type": "application/json",
-      authorization: `Bearer ${token}` || ""
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}` || ''
     },
     body: JSON.stringify(QUERY_USER)
   })
@@ -93,8 +91,8 @@ MyApp.getInitialProps = async ({ ctx, router }) => {
     const result = await response.json()
     return { user: result.data.user }
   } else {
-    if (router.pathname === "/cart") {
-      ctx.res.writeHead(302, { Location: "/signin" })
+    if (router.pathname === '/cart') {
+      ctx.res.writeHead(302, { Location: '/signin' })
       ctx.res.end()
     }
     return null

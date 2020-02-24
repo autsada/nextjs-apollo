@@ -1,6 +1,6 @@
-import React, { createContext, useState, useEffect } from "react"
-import Router from "next/router"
-import Cookies from "js-cookie"
+import React, { createContext, useState, useEffect } from 'react'
+import Router from 'next/router'
+import Cookies from 'js-cookie'
 
 export const AuthContext = createContext()
 
@@ -9,27 +9,27 @@ const AuthProvider = ({ children, userData }) => {
 
   useEffect(() => {
     const syncLogout = e => {
-      if (e.key === "logout") {
+      if (e.key === 'logout') {
         setUser(null)
-        Router.push("/products")
+        Router.push('/products')
       }
     }
 
-    window.addEventListener("storage", syncLogout)
+    window.addEventListener('storage', syncLogout)
 
     return () => {
-      window.removeEventListener("storage", syncLogout)
-      window.localStorage.removeItem("logout")
+      window.removeEventListener('storage', syncLogout)
+      window.localStorage.removeItem('logout')
     }
   }, [])
 
   const setAuthUser = userInfo => setUser(userInfo)
 
   const signout = () => {
-    Cookies.remove("jwt")
+    Cookies.remove('jwt')
     setUser(null)
-    localStorage.setItem("logout", Date.now())
-    Router.push("/products")
+    localStorage.setItem('logout', Date.now())
+    Router.push('/products')
   }
 
   return (
