@@ -15,6 +15,7 @@ const aStyle = {
 const Nav = () => {
   const { user, signout } = useContext(AuthContext)
 
+  console.log(user)
   return (
     <nav
       style={{
@@ -47,7 +48,23 @@ const Nav = () => {
           <>
             <li style={liStyle}>
               <Link href='/cart'>
-                <a style={aStyle}>Cart</a>
+                <a style={aStyle}>
+                  Cart{' '}
+                  <span
+                    style={{
+                      background: 'red',
+                      color: 'white',
+                      padding: '3px',
+                      borderRadius: '50%'
+                    }}
+                  >
+                    {user && user.carts && user.carts.length === 0 && 0}
+                    {user &&
+                      user.carts &&
+                      user.carts.length > 0 &&
+                      user.carts.reduce((sum, item) => sum + item.quantity, 0)}
+                  </span>
+                </a>
               </Link>
             </li>
 
