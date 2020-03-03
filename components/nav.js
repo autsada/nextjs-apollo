@@ -1,7 +1,9 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
+import { useQuery } from '@apollo/react-hooks'
 import Link from 'next/link'
 
 import { AuthContext } from '../appState/AuthProvider'
+import { ME } from './UserProducts'
 
 const liStyle = { listStyle: 'none' }
 
@@ -13,7 +15,14 @@ const aStyle = {
 }
 
 const Nav = () => {
-  const { user, signout } = useContext(AuthContext)
+  const { user, signout, setAuthUser } = useContext(AuthContext)
+  const { data } = useQuery(ME)
+
+  useEffect(() => {
+    if (data) {
+      setAuthUser(data.user)
+    }
+  }, [data])
 
   console.log(user)
   return (

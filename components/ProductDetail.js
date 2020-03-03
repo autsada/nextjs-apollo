@@ -1,11 +1,16 @@
-import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import React, { useContext } from 'react'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import { useRouter } from 'next/router'
 import gql from 'graphql-tag'
+
+import { ME } from './UserProducts'
+import { ADD_TO_CART } from './ProductItem'
+import { AuthContext } from '../appState/AuthProvider'
 
 const QUERY_PRODUCT = gql`
   query QUERY_PRODUCT($id: ID!) {
     product(id: $id) {
+      id
       description
       price
       imageUrl
@@ -15,10 +20,25 @@ const QUERY_PRODUCT = gql`
 
 const Product = () => {
   const route = useRouter()
+  const { user } = useContext(AuthContext)
 
   const { data, loading, error } = useQuery(QUERY_PRODUCT, {
     variables: { id: route.query.productId }
   })
+
+  const [addToCart] = useMutation(ADD_TO_CART, {
+    onCompleted: data => {
+      console.log(data)
+    },
+    refetchQueries: [{ query: ME }]
+  })
+
+  const handleAddToCart = async id => {
+    if (!user) {
+      return Router.push('/signin')
+    }
+    await addToCart({ variables: { id } })
+  }
 
   if (error) return <p>Something went wrong, please try again.</p>
 
@@ -48,6 +68,7 @@ const Product = () => {
           cursor: 'pointer',
           border: 'none'
         }}
+        onClick={() => handleAddToCart(data.product.id)}
       >
         Add to Cart
       </button>
