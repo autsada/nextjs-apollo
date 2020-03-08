@@ -1,10 +1,10 @@
-import React, { useState, useContext } from "react"
-import Router from "next/router"
-import { useMutation } from "@apollo/react-hooks"
-import gql from "graphql-tag"
-import Cookies from "js-cookie"
+import React, { useState, useContext } from 'react'
+import Router from 'next/router'
+import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+import Cookies from 'js-cookie'
 
-import { AuthContext } from "../appState/AuthProvider"
+import { AuthContext } from '../appState/AuthProvider'
 
 const LOG_IN = gql`
   mutation LOG_IN($email: String!, $password: String!) {
@@ -15,6 +15,9 @@ const LOG_IN = gql`
         email
         products {
           id
+          imageUrl
+          description
+          price
         }
         carts {
           id
@@ -33,8 +36,8 @@ const LOG_IN = gql`
 
 const Signin = () => {
   const [userInfo, setUserInfo] = useState({
-    email: "",
-    password: ""
+    email: '',
+    password: ''
   })
   const { setAuthUser } = useContext(AuthContext)
 
@@ -43,12 +46,12 @@ const Signin = () => {
     onCompleted: data => {
       if (data) {
         setAuthUser(data.login.user)
-        Cookies.set("jwt", data.login.jwt)
+        Cookies.set('jwt', data.login.jwt)
         setUserInfo({
-          email: "",
-          password: ""
+          email: '',
+          password: ''
         })
-        Router.push("/products")
+        Router.push('/products')
       }
     }
   })
@@ -70,64 +73,64 @@ const Signin = () => {
   }
 
   return (
-    <div style={{ margin: "100px" }}>
+    <div style={{ margin: '100px' }}>
       <form
         style={{
-          display: "flex",
-          flexDirection: "column",
-          margin: "auto",
-          width: "30%"
+          display: 'flex',
+          flexDirection: 'column',
+          margin: 'auto',
+          width: '30%'
         }}
         onSubmit={handleSubmit}
       >
         <input
-          style={{ margin: "5px", height: "30px" }}
-          type="email"
-          name="email"
-          placeholder="Email"
+          style={{ margin: '5px', height: '30px' }}
+          type='email'
+          name='email'
+          placeholder='Email'
           value={userInfo.email}
           onChange={handleChange}
         />
         <input
-          style={{ margin: "5px", height: "30px" }}
-          type="password"
-          name="password"
-          placeholder="Password"
+          style={{ margin: '5px', height: '30px' }}
+          type='password'
+          name='password'
+          placeholder='Password'
           value={userInfo.password}
           onChange={handleChange}
         />
         <button
           style={{
-            margin: "5px",
-            padding: "10px",
-            background: "teal",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "18px"
+            margin: '5px',
+            padding: '10px',
+            background: 'teal',
+            color: 'white',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '18px'
           }}
-          type="submit"
+          type='submit'
           disabled={loading}
         >
           Submit
         </button>
       </form>
 
-      <div style={{ width: "30%", margin: "auto" }}>
+      <div style={{ width: '30%', margin: 'auto' }}>
         <p>
-          Forgot password?{" "}
+          Forgot password?{' '}
           <span
-            style={{ color: "orange", cursor: "pointer" }}
-            onClick={() => Router.push("/signin/requestresetpassword")}
+            style={{ color: 'orange', cursor: 'pointer' }}
+            onClick={() => Router.push('/signin/requestresetpassword')}
           >
             Click here
           </span>
         </p>
       </div>
 
-      <div style={{ width: "30%", margin: "auto" }}>
+      <div style={{ width: '30%', margin: 'auto' }}>
         {error && (
-          <p style={{ color: "red" }}>{error.graphQLErrors[0].message}</p>
+          <p style={{ color: 'red' }}>{error.graphQLErrors[0].message}</p>
         )}
       </div>
     </div>

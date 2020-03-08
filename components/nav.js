@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import Link from 'next/link'
+import gql from 'graphql-tag'
 
 import { AuthContext } from '../appState/AuthProvider'
-import { ME } from './UserProducts'
 
 const liStyle = { listStyle: 'none' }
 
@@ -13,6 +13,32 @@ const aStyle = {
   fontWeight: 'bold',
   textDecoration: 'none'
 }
+
+export const ME = gql`
+  query ME {
+    user {
+      id
+      name
+      email
+      products {
+        id
+        description
+        imageUrl
+        price
+      }
+      carts {
+        id
+        product {
+          id
+          description
+          imageUrl
+          price
+        }
+        quantity
+      }
+    }
+  }
+`
 
 const Nav = () => {
   const { user, signout, setAuthUser } = useContext(AuthContext)

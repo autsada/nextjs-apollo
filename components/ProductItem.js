@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Router from 'next/router'
 
 import { AuthContext } from '../appState/AuthProvider'
-import { ME } from './UserProducts'
+import { ME } from './Nav'
 
 export const ADD_TO_CART = gql`
   mutation ADD_TO_CART($id: ID!) {

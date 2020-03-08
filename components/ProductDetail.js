@@ -3,7 +3,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { useRouter } from 'next/router'
 import gql from 'graphql-tag'
 
-import { ME } from './UserProducts'
+import { ME } from './Nav'
 import { ADD_TO_CART } from './ProductItem'
 import { AuthContext } from '../appState/AuthProvider'
 
