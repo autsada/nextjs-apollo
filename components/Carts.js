@@ -24,10 +24,33 @@ const Carts = () => {
         <h3 style={{ margin: 'auto' }}>Actions</h3>
       </div>
 
-      {/* Body */}
-      {user &&
-        user.carts.length > 0 &&
-        user.carts.map(cart => <CartItem key={cart.id} cart={cart} />)}
+      <>
+        {/* Body */}
+        {user &&
+          user.carts.length > 0 &&
+          user.carts.map(cart => <CartItem key={cart.id} cart={cart} />)}
+      </>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 2fr',
+          width: '100%'
+        }}
+      >
+        <div style={{ margin: 'auto' }}></div>
+        <div style={{ margin: 'auto' }}></div>
+        <div style={{ margin: 'auto' }}></div>
+        <div style={{ margin: 'auto' }}></div>
+        <div style={{ margin: 'auto' }}>
+          {user &&
+            user.carts.length > 0 &&
+            user.carts.reduce(
+              (sum, cart) => sum + cart.quantity * cart.product.price,
+              0
+            )}
+        </div>
+        <div style={{ margin: 'auto' }}></div>
+      </div>
     </div>
   )
 }

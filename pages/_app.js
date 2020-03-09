@@ -27,6 +27,9 @@ const QUERY_USER = {
         email
         products {
           id
+          imageUrl
+          description
+          price
         }
         carts {
           id

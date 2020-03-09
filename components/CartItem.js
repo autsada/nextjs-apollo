@@ -1,76 +1,32 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import fetch from 'isomorphic-unfetch'
 import gql from 'graphql-tag'
 
 import { ME } from './Nav'
 
-// const UPDATE_PRODUCT = gql`
-//   mutation UPDATE_PRODUCT(
-//     $id: ID!
-//     $description: String
-//     $imageUrl: String
-//     $price: Float
-//   ) {
-//     updateProduct(
-//       id: $id
-//       description: $description
-//       imageUrl: $imageUrl
-//       price: $price
-//     ) {
-//       id
-//       description
-//       price
-//       imageUrl
-//     }
-//   }
-// `
+const DELETE_CART = gql`
+  mutation DELETE_CART($id: ID!) {
+    deleteCart(id: $id) {
+      id
+    }
+  }
+`
 
 const CartItem = ({ cart }) => {
-  //   const [updateProduct, { loading, error }] = useMutation(UPDATE_PRODUCT, {
-  //     onCompleted: data => {
-  //       console.log(data)
-  //       setProductData(data.updateProduct)
-  //       setEdit(false)
-  //     },
-  //     refetchQueries: [{ query: QUERY_PRODUCTS }, { query: ME }]
-  //   })
+  const [deleteCart, { loading, error }] = useMutation(DELETE_CART, {
+    onCompleted: data => {
+      console.log(data)
+    },
+    refetchQueries: [{ query: ME }]
+  })
 
-  //   const handleSubmit = async () => {
-  //     if (!file && productData === product) {
-  //       setProductData(product)
-  //       setEdit(false)
-  //       return
-  //     }
-
-  //     console.log(productData)
-
-  //     try {
-  //       console.log(file)
-  //       if (file) {
-  //         const url = await uploadFile()
-  //         if (url) {
-  //           await updateProduct({
-  //             variables: {
-  //               ...productData,
-  //               imageUrl: url,
-  //               price: +productData.price
-  //             }
-  //           })
-  //         }
-  //       } else {
-  //         await updateProduct({
-  //           variables: {
-  //             ...productData,
-  //             imageUrl: productData.imageUrl,
-  //             price: +productData.price
-  //           }
-  //         })
-  //       }
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
+  const handleSubmit = async () => {
+    try {
+      await deleteCart({ variables: { id: cart.id } })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div
@@ -117,10 +73,9 @@ const CartItem = ({ cart }) => {
             background: 'red',
             color: 'white'
           }}
-          //   onClick={handleSubmit}
+          onClick={handleSubmit}
         >
-          Delete
-          {/* {loading ? 'Editing...' : 'Confirm Edit'} */}
+          {loading ? 'Deleting...' : error ? 'Error' : 'Delete'}
         </button>
       </div>
     </div>
