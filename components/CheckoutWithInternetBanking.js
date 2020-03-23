@@ -3,12 +3,7 @@ import Script from 'react-load-script'
 
 let OmiseCard
 
-const CheckoutWithInternetBanking = ({ carts }) => {
-  const amount = carts.reduce(
-    (sum, cart) => sum + cart.quantity * cart.product.price,
-    0
-  )
-
+const CheckoutWithInternetBanking = ({ amount, handleCheckout }) => {
   const handleLoadScript = () => {
     OmiseCard = window.OmiseCard
     OmiseCard.configure({
@@ -38,10 +33,10 @@ const CheckoutWithInternetBanking = ({ carts }) => {
   const omiseCardHandler = () => {
     OmiseCard.open({
       frameDescription: 'Invoice #3847',
-      amount: amount * 100,
+      amount,
       onCreateTokenSuccess: token => {
         console.log(token)
-        //   createCreditCardCharge(user.email, user.name, cart.amount, token)
+        handleCheckout(amount, null, token, 'http://localhost:3000/cart')
       },
       onFormClosed: () => {}
     })

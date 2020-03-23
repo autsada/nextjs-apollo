@@ -4,7 +4,7 @@ import Script from 'react-load-script'
 let OmiseCard
 
 console.log(process.env.OMISE_PUBLIC_KEY)
-const CheckoutWithCreditCard = ({ amount, creditCardCheckout }) => {
+const CheckoutWithCreditCard = ({ amount, handleCheckout }) => {
   const handleLoadScript = () => {
     OmiseCard = window.OmiseCard
     OmiseCard.configure({
@@ -31,7 +31,7 @@ const CheckoutWithCreditCard = ({ amount, creditCardCheckout }) => {
       amount,
       onCreateTokenSuccess: token => {
         console.log(token)
-        creditCardCheckout(amount, null, token)
+        handleCheckout(amount, null, token)
       },
       onFormClosed: () => {}
     })

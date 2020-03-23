@@ -9,8 +9,18 @@ import CheckoutWithInternetBanking from './CheckoutWithInternetBanking'
 import { ME } from './Nav'
 
 const CREATE_ORDER = gql`
-  mutation CREATE_ORDER($amount: Float!, $cardId: String, $token: String) {
-    createOrder(amount: $amount, cardId: $cardId, token: $token) {
+  mutation CREATE_ORDER(
+    $amount: Float!
+    $cardId: String
+    $token: String
+    $return_uri: String
+  ) {
+    createOrder(
+      amount: $amount
+      cardId: $cardId
+      token: $token
+      return_uri: $return_uri
+    ) {
       id
       items {
         id
@@ -20,6 +30,7 @@ const CREATE_ORDER = gql`
         }
         quantity
       }
+      authorize_uri
     }
   }
 `
@@ -36,11 +47,18 @@ const Carts = () => {
   const { user } = useContext(AuthContext)
 
   const [createOrder, { loading, error }] = useMutation(CREATE_ORDER, {
+    onCompleted: data => {
+      if (data.createOrder.authorize_uri) {
+        window.location.href = data.createOrder.authorize_uri
+      }
+    },
     refetchQueries: [{ query: ME }]
   })
 
-  const creditCardCheckout = async (amount, cardId, token) => {
-    const result = await createOrder({ variables: { amount, cardId, token } })
+  const handleCheckout = async (amount, cardId, token, return_uri) => {
+    const result = await createOrder({
+      variables: { amount, cardId, token, return_uri }
+    })
     console.log('Result -->', result)
   }
 
@@ -125,7 +143,7 @@ const Carts = () => {
                         }}
                         onClick={() => {
                           const amount = calculateAmount(user.carts)
-                          creditCardCheckout(amount, card.id)
+                          handleCheckout(amount, card.id)
                         }}
                       >
                         Use This Card
@@ -137,9 +155,12 @@ const Carts = () => {
 
             <CheckoutWithCreditCard
               amount={calculateAmount(user.carts)}
-              creditCardCheckout={creditCardCheckout}
+              handleCheckout={handleCheckout}
             />
-            <CheckoutWithInternetBanking carts={user.carts} />
+            <CheckoutWithInternetBanking
+              amount={calculateAmount(user.carts)}
+              handleCheckout={handleCheckout}
+            />
           </>
         )}
       </div>
