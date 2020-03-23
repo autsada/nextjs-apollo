@@ -1,13 +1,50 @@
 import React, { useContext } from 'react'
+import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
 import CartItem from './CartItem'
 import { AuthContext } from '../appState/AuthProvider'
 import CheckoutWithCreditCard from './CheckoutWithCreditCard'
 import CheckoutWithInternetBanking from './CheckoutWithInternetBanking'
+import { ME } from './Nav'
+
+const CREATE_ORDER = gql`
+  mutation CREATE_ORDER($amount: Float!, $cardId: String, $token: String) {
+    createOrder(amount: $amount, cardId: $cardId, token: $token) {
+      id
+      items {
+        id
+        product {
+          description
+          price
+        }
+        quantity
+      }
+    }
+  }
+`
+
+const calculateAmount = carts => {
+  const amount = carts.reduce(
+    (sum, cart) => sum + cart.quantity * cart.product.price,
+    0
+  )
+  return amount * 100
+}
 
 const Carts = () => {
   const { user } = useContext(AuthContext)
 
+  const [createOrder, { loading, error }] = useMutation(CREATE_ORDER, {
+    refetchQueries: [{ query: ME }]
+  })
+
+  const creditCardCheckout = async (amount, cardId, token) => {
+    const result = await createOrder({ variables: { amount, cardId, token } })
+    console.log('Result -->', result)
+  }
+
+  console.log(user)
   return (
     user && (
       <div style={{ width: '70%', margin: 'auto', marginTop: '50px' }}>
@@ -48,16 +85,60 @@ const Carts = () => {
               <div style={{ margin: 'auto' }}></div>
               <div style={{ margin: 'auto' }}></div>
               <div style={{ margin: 'auto' }}>
-                {user.carts.length > 0 &&
-                  user.carts.reduce(
-                    (sum, cart) => sum + cart.quantity * cart.product.price,
-                    0
-                  )}
+                {user.carts.length > 0 && calculateAmount(user.carts) / 100}
               </div>
               <div style={{ margin: 'auto' }}></div>
             </div>
 
-            <CheckoutWithCreditCard carts={user.carts} />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: '20px'
+              }}
+            >
+              <div>
+                {user &&
+                  user.cards &&
+                  user.cards.map(card => (
+                    <div
+                      key={card.id}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <p>
+                        **** **** {card.cardInfo.last_digits}{' '}
+                        {card.cardInfo.brand} expire:
+                        {card.cardInfo.expiration_month}/
+                        {card.cardInfo.expiration_year}
+                      </p>
+                      <button
+                        style={{
+                          background: 'blue',
+                          cursor: 'pointer',
+                          color: 'white',
+                          border: 'none'
+                        }}
+                        onClick={() => {
+                          const amount = calculateAmount(user.carts)
+                          creditCardCheckout(amount, card.id)
+                        }}
+                      >
+                        Use This Card
+                      </button>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            <CheckoutWithCreditCard
+              amount={calculateAmount(user.carts)}
+              creditCardCheckout={creditCardCheckout}
+            />
             <CheckoutWithInternetBanking carts={user.carts} />
           </>
         )}

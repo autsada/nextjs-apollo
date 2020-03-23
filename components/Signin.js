@@ -28,6 +28,27 @@ const LOG_IN = gql`
           }
           quantity
         }
+        orders {
+          id
+          items {
+            product {
+              description
+              price
+              imageUrl
+            }
+            quantity
+          }
+        }
+        cards {
+          id
+          cardInfo {
+            id
+            expiration_month
+            expiration_year
+            brand
+            last_digits
+          }
+        }
       }
       jwt
     }

@@ -4,12 +4,7 @@ import Script from 'react-load-script'
 let OmiseCard
 
 console.log(process.env.OMISE_PUBLIC_KEY)
-const CheckoutWithCreditCard = ({ carts }) => {
-  const amount = carts.reduce(
-    (sum, cart) => sum + cart.quantity * cart.product.price,
-    0
-  )
-
+const CheckoutWithCreditCard = ({ amount, creditCardCheckout }) => {
   const handleLoadScript = () => {
     OmiseCard = window.OmiseCard
     OmiseCard.configure({
@@ -33,10 +28,10 @@ const CheckoutWithCreditCard = ({ carts }) => {
   const omiseCardHandler = () => {
     OmiseCard.open({
       frameDescription: 'Invoice #3847',
-      amount: amount * 100,
+      amount,
       onCreateTokenSuccess: token => {
         console.log(token)
-        //   createCreditCardCharge(user.email, user.name, cart.amount, token)
+        creditCardCheckout(amount, null, token)
       },
       onFormClosed: () => {}
     })
