@@ -21,7 +21,7 @@ git clone https://github.com/autsada/nextjs-apollo.git
 npm install
 ```
 
-## Note:
+### Note:
 
 In order to integrate Omise payment gateway, you need to have Omise account (https://www.omise.co/) and have your account public key set in .env file in the root of the project. You can create an Omise free account at given link above. Or you can use any other well-known payment gateways such as Stripe or Paypal. 
 
