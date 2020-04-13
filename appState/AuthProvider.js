@@ -8,7 +8,7 @@ const AuthProvider = ({ children, userData }) => {
   const [user, setUser] = useState(userData)
 
   useEffect(() => {
-    const syncLogout = e => {
+    const syncLogout = (e) => {
       if (e.key === 'logout') {
         setUser(null)
         Router.push('/products')
@@ -23,7 +23,7 @@ const AuthProvider = ({ children, userData }) => {
     }
   }, [])
 
-  const setAuthUser = userInfo => setUser(userInfo)
+  const setAuthUser = (userInfo) => setUser(userInfo)
 
   const signout = () => {
     Cookies.remove('jwt')

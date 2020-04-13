@@ -170,7 +170,12 @@ const Signup = () => {
             color: 'white',
           }}
         >
-          Sign in with Google
+          <a
+            style={{ color: 'white', textDecoration: 'none' }}
+            href='http://localhost:4444/auth/google'
+          >
+            Sign in with Google
+          </a>
         </button>
       </div>
     </div>

@@ -63,7 +63,7 @@ const QUERY_USER = {
         }
       }
     }
-  `
+  `,
 }
 
 function MyApp({ Component, pageProps, apollo, user }) {
@@ -106,9 +106,9 @@ MyApp.getInitialProps = async ({ ctx, router }) => {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      authorization: `Bearer ${token}` || ''
+      authorization: `Bearer ${token}` || '',
     },
-    body: JSON.stringify(QUERY_USER)
+    body: JSON.stringify(QUERY_USER),
   })
 
   if (response.ok) {
